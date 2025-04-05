@@ -18,7 +18,7 @@ private:
 };
 
 // Binding
-EMSCRIPTEN_BINDINGS(my_module) {
+EMSCRIPTEN_BINDINGS(calculator) {
   class_<Calculator>("Calculator")
     .constructor<int>()
     .function("add", &Calculator::add)

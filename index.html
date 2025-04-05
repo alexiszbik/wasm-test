@@ -5,42 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ma Page HTML</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
         h1 {
             color: #007BFF;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            width: 100%;
+            height: auto;
         }
     </style>
 </head>
 <body>
+
+
+<h1>Bienvenue sur ma page web !</h1>
+<p>Ceci est une page HTML de base générée automatiquement.</p>
+<button onclick="myFunction()">Click here</button>
+<br/><br/>
+<canvas id="gridCanvas"></canvas>
+
 <script src="main.js"></script>
 <script src="calculator.js"></script>
+<script src="matrix.js"></script>
 <script type="text/javascript">
-
-    Module.onRuntimeInitialized = () => {
-        const result = Module._myFunction(); // ou via ccall
-        console.log(result);
-        const value = Module._operation(12, 24); // ou via ccall
-        console.log(value);
-    };
-
     let Calculator;
-/*
-    createCalculator().then(Module => {
-        const Calculator = Module.Calculator;
 
-        const calc = new Calculator(10);
-        console.log("10 + 5 =", calc.add(5)); // 15
-
-        calc.setBase(42);
-        console.log("42 + 3 =", calc.add(3)); // 45
-    });
- */
     // Creat async calculator
     async function initializeCalculator() {
         const Module = await createCalculator();
@@ -60,11 +56,61 @@
             alert("Not ready");
         }
     }
-</script>
 
-<h1>Bienvenue sur ma page web !</h1>
-<p>Ceci est une page HTML de base générée automatiquement.</p>
-<button onclick="myFunction()">Click here</button>
+    const canvas = document.getElementById("gridCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const width = 64;
+    const height = 16;
+
+    const cellSize = 8;
+
+    canvas.width = width * cellSize;
+    canvas.height = height * cellSize;
+
+    function drawGrid() {
+        ctx.strokeStyle = "black";
+        for (let i = 0; i <= height; i++) {
+            ctx.beginPath();
+            ctx.moveTo(0, i * cellSize);
+            ctx.lineTo(canvas.width, i * cellSize);
+            ctx.stroke();
+        }
+        for (let j = 0; j <= width; j++) {
+            ctx.beginPath();
+            ctx.moveTo(j * cellSize, 0);
+            ctx.lineTo(j * cellSize, canvas.height);
+            ctx.stroke();
+        }
+    }
+
+    drawGrid();
+
+    let Matrix;
+    async function initializeMatrix() {
+        const Module = await createMatrix();
+        Matrix = Module.Matrix;
+    }
+
+    initializeMatrix().then(() => {
+        console.log("matrix is OK !");
+        if (Matrix) {
+            const matrix = new Matrix(16, 64);
+            console.log(matrix.getPixel(0,0));
+            console.log(matrix.getPixel(1,0));
+            for (var i = 0; i < width; i++) {
+                for (var j = 0; j < height; j++) {
+
+                    if (matrix.getPixel(i, j)) {
+                        ctx.fillStyle = "red";
+                        ctx.fillRect((0 + i) * cellSize, (0 + j) * cellSize, cellSize, cellSize);
+                    }
+                }
+            }
+        }
+    });
+
+</script>
 
 </body>
 </html>
