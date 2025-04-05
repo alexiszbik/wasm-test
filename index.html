@@ -19,17 +19,52 @@
 </head>
 <body>
 <script src="main.js"></script>
+<script src="calculator.js"></script>
 <script type="text/javascript">
+
     Module.onRuntimeInitialized = () => {
         const result = Module._myFunction(); // ou via ccall
         console.log(result);
         const value = Module._operation(12, 24); // ou via ccall
         console.log(value);
     };
+
+    let Calculator;
+/*
+    createCalculator().then(Module => {
+        const Calculator = Module.Calculator;
+
+        const calc = new Calculator(10);
+        console.log("10 + 5 =", calc.add(5)); // 15
+
+        calc.setBase(42);
+        console.log("42 + 3 =", calc.add(3)); // 45
+    });
+ */
+    // Creat async calculator
+    async function initializeCalculator() {
+        const Module = await createCalculator();
+        Calculator = Module.Calculator;
+    }
+
+    initializeCalculator().then(() => {
+        console.log("init OK !");
+    });
+
+    function myFunction() {
+        if (Calculator) {
+            const calc = new Calculator(10);
+            const result = calc.add(5); // 15
+            alert("10 + 5 = " + result);
+        } else {
+            alert("Not ready");
+        }
+    }
 </script>
 
 <h1>Bienvenue sur ma page web !</h1>
 <p>Ceci est une page HTML de base générée automatiquement.</p>
+<button onclick="myFunction()">Click here</button>
 
 </body>
 </html>
