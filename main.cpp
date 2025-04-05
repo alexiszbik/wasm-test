@@ -16,3 +16,7 @@ EXTERN EMSCRIPTEN_KEEPALIVE void myFunction(int argc, char ** argv) {
     printf("MyFunction Called\n");
 }
 
+EXTERN EMSCRIPTEN_KEEPALIVE int operation(int a, int b) {
+    return a + b;
+}
+
